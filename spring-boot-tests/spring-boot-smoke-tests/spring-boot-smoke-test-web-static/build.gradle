@@ -13,11 +13,10 @@ configurations {
 
 dependencies {
 	implementation(project(":spring-boot-project:spring-boot-starters:spring-boot-starter-web"))
-
-	providedRuntime( project(":spring-boot-project:spring-boot-starters:spring-boot-starter-tomcat"))
-
+	implementation("mysql:mysql-connector-java:8.0.31")
+	implementation( project(":spring-boot-project:spring-boot-starters:spring-boot-starter-tomcat"))
+	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0")
 	runtimeOnly("org.webjars:bootstrap:3.0.3")
 	runtimeOnly("org.webjars:jquery:2.0.3-1")
-
 	testImplementation(project(":spring-boot-project:spring-boot-starters:spring-boot-starter-test"))
 }

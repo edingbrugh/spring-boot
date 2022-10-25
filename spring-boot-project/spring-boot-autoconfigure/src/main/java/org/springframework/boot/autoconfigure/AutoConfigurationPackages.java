@@ -40,13 +40,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Class for storing auto-configuration packages for reference later (e.g. by JPA entity
- * scanner).
- *
- * @author Phillip Webb
- * @author Dave Syer
- * @author Oliver Gierke
- * @since 1.0.0
+ *类用于存储自动配置包以供以后参考(例如通过JPA实体扫描器)。
  */
 public abstract class AutoConfigurationPackages {
 
@@ -55,20 +49,14 @@ public abstract class AutoConfigurationPackages {
 	private static final String BEAN = AutoConfigurationPackages.class.getName();
 
 	/**
-	 * Determine if the auto-configuration base packages for the given bean factory are
-	 * available.
-	 * @param beanFactory the source bean factory
-	 * @return true if there are auto-config packages available
+	 * 确定给定bean工厂的自动配置基本包是否可用。
 	 */
 	public static boolean has(BeanFactory beanFactory) {
 		return beanFactory.containsBean(BEAN) && !get(beanFactory).isEmpty();
 	}
 
 	/**
-	 * Return the auto-configuration base packages for the given bean factory.
-	 * @param beanFactory the source bean factory
-	 * @return a list of auto-configuration packages
-	 * @throws IllegalStateException if auto-configuration is not enabled
+	 * 返回给定bean工厂的自动配置基本包。
 	 */
 	public static List<String> get(BeanFactory beanFactory) {
 		try {
@@ -80,15 +68,9 @@ public abstract class AutoConfigurationPackages {
 	}
 
 	/**
-	 * Programmatically registers the auto-configuration package names. Subsequent
-	 * invocations will add the given package names to those that have already been
-	 * registered. You can use this method to manually define the base packages that will
-	 * be used for a given {@link BeanDefinitionRegistry}. Generally it's recommended that
-	 * you don't call this method directly, but instead rely on the default convention
-	 * where the package name is set from your {@code @EnableAutoConfiguration}
-	 * configuration class or classes.
-	 * @param registry the bean definition registry
-	 * @param packageNames the package names to set
+	 * 以编程方式注册自动配置包名。后续调用将把给定的包名添加到已经注册的包名中。您可以使用此方法手动定义将用于给定
+	 * {@link BeanDefinitionRegistry}的基本包。通常建议不要直接调用此方法，而是依赖于默认约定，
+	 * 其中包名是从您的{@code @EnableAutoConfiguration}配置类或多个类中设置的。
 	 */
 	public static void register(BeanDefinitionRegistry registry, String... packageNames) {
 		if (registry.containsBeanDefinition(BEAN)) {
@@ -101,8 +83,7 @@ public abstract class AutoConfigurationPackages {
 	}
 
 	/**
-	 * {@link ImportBeanDefinitionRegistrar} to store the base package from the importing
-	 * configuration.
+	 * {@link ImportBeanDefinitionRegistrar} 从导入配置中存储基本包。
 	 */
 	static class Registrar implements ImportBeanDefinitionRegistrar, DeterminableImports {
 
@@ -119,7 +100,7 @@ public abstract class AutoConfigurationPackages {
 	}
 
 	/**
-	 * Wrapper for a package import.
+	 * 用于包导入的包装器。
 	 */
 	private static final class PackageImports {
 
@@ -163,7 +144,7 @@ public abstract class AutoConfigurationPackages {
 	}
 
 	/**
-	 * Holder for the base package (name may be null to indicate no scanning).
+	 * 基本包的Holder(名称可以为空，表示没有扫描)。
 	 */
 	static final class BasePackages {
 

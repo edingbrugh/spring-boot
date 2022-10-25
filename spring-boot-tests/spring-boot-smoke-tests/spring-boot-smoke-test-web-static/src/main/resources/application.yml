@@ -1,0 +1,17 @@
+server:
+  port: 9001
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://127.0.0.1:3306/flink_test
+    username: root
+    password: 1234567890
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 60
+      auto-commit: true
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-timeout: 60000

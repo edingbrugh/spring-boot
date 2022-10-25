@@ -85,120 +85,48 @@ import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
 
 /**
- * Class that can be used to bootstrap and launch a Spring application from a Java main
- * method. By default class will perform the following steps to bootstrap your
- * application:
+ * 该类可用于从Java主方法引导和启动Spring应用程序。默认情况下，class将执行以下步骤来引导您的应用程序:
  *
  * <ul>
- * <li>Create an appropriate {@link ApplicationContext} instance (depending on your
- * classpath)</li>
- * <li>Register a {@link CommandLinePropertySource} to expose command line arguments as
- * Spring properties</li>
- * <li>Refresh the application context, loading all singleton beans</li>
- * <li>Trigger any {@link CommandLineRunner} beans</li>
+ *<li>创建一个适当的{@link ApplicationContext}实例(取决于您的类路径)<li>
+ *     <li>注册一个{@link CommandLinePropertySource}，将命令行参数公开为Spring属性<li>
+ *     <li>刷新应用程序上下文，加载所有单例bean <li>
+ *     <li>触发任何{@link CommandLineRunner} bean <li>
  * </ul>
  *
- * In most circumstances the static {@link #run(Class, String[])} method can be called
- * directly from your {@literal main} method to bootstrap your application:
+ * 在大多数情况下，静态{@link run (Class, String[])}方法可以直接从你的{@literal main}方法调用来引导你的应用程序:
  *
- * <pre class="code">
- * &#064;Configuration
- * &#064;EnableAutoConfiguration
- * public class MyApplication  {
- *
- *   // ... Bean definitions
- *
- *   public static void main(String[] args) {
- *     SpringApplication.run(MyApplication.class, args);
- *   }
- * }
- * </pre>
- *
- * <p>
- * For more advanced configuration a {@link SpringApplication} instance can be created and
- * customized before being run:
- *
- * <pre class="code">
- * public static void main(String[] args) {
- *   SpringApplication application = new SpringApplication(MyApplication.class);
- *   // ... customize application settings here
- *   application.run(args)
- * }
- * </pre>
- *
- * {@link SpringApplication}s can read beans from a variety of different sources. It is
- * generally recommended that a single {@code @Configuration} class is used to bootstrap
- * your application, however, you may also set {@link #getSources() sources} from:
+ * {SpringApplication}可以从各种不同的源读取bean。通常建议使用一个{@code @Configuration}类来引导你的应用程序，但是，
+ * 你也可以从下面设置{@link getSources () sources}:
  * <ul>
- * <li>The fully qualified class name to be loaded by
- * {@link AnnotatedBeanDefinitionReader}</li>
- * <li>The location of an XML resource to be loaded by {@link XmlBeanDefinitionReader}, or
- * a groovy script to be loaded by {@link GroovyBeanDefinitionReader}</li>
- * <li>The name of a package to be scanned by {@link ClassPathBeanDefinitionScanner}</li>
- * </ul>
+ *     <li>由{@link AnnotatedBeanDefinitionReader}加载的完全限定类名，由{@link XmlBeanDefinitionReader}加载的XML资源的位置，
+ *     或由{@link GroovyBeanDefinitionReader 加载的groovy脚本
+ *     <li> <li>由{@link ClassPathBeanDefinitionScanner}<li>
+ * <ul>加载的包名称
  *
- * Configuration properties are also bound to the {@link SpringApplication}. This makes it
- * possible to set {@link SpringApplication} properties dynamically, like additional
- * sources ("spring.main.sources" - a CSV list) the flag to indicate a web environment
- * ("spring.main.web-application-type=none") or the flag to switch off the banner
- * ("spring.main.banner-mode=off").
- *
- * @author Phillip Webb
- * @author Dave Syer
- * @author Andy Wilkinson
- * @author Christian Dupuis
- * @author Stephane Nicoll
- * @author Jeremy Rickard
- * @author Craig Burke
- * @author Michael Simons
- * @author Madhura Bhave
- * @author Brian Clozel
- * @author Ethan Rubinson
- * @since 1.0.0
- * @see #run(Class, String[])
- * @see #run(Class[], String[])
- * @see #SpringApplication(Class...)
+ * 配置属性也绑定到{@link SpringApplication}。这使得动态设置{@link SpringApplication}属性成为可能，
+ *比如其他源("spring.main. application . ")source”-一个CSV列表)标志来指示一个web环境("spring.main.web-application-type=none")或标志来关闭横幅("spring.main.banner-mode=off")。
  */
 public class SpringApplication {
 
-	/**
-	 * The class name of application context that will be used by default for non-web
-	 * environments.
-	 * @deprecated since 2.4.0 for removal in 2.6.0 in favor of using a
-	 * {@link ApplicationContextFactory}
-	 */
+
 	@Deprecated
 	public static final String DEFAULT_CONTEXT_CLASS = "org.springframework.context."
 			+ "annotation.AnnotationConfigApplicationContext";
 
-	/**
-	 * The class name of application context that will be used by default for web
-	 * environments.
-	 * @deprecated since 2.4.0 for removal in 2.6.0 in favor of using an
-	 * {@link ApplicationContextFactory}
-	 */
+
 	@Deprecated
 	public static final String DEFAULT_SERVLET_WEB_CONTEXT_CLASS = "org.springframework.boot."
 			+ "web.servlet.context.AnnotationConfigServletWebServerApplicationContext";
 
-	/**
-	 * The class name of application context that will be used by default for reactive web
-	 * environments.
-	 * @deprecated since 2.4.0 for removal in 2.6.0 in favor of using an
-	 * {@link ApplicationContextFactory}
-	 */
 	@Deprecated
 	public static final String DEFAULT_REACTIVE_WEB_CONTEXT_CLASS = "org.springframework."
 			+ "boot.web.reactive.context.AnnotationConfigReactiveWebServerApplicationContext";
 
-	/**
-	 * Default banner location.
-	 */
+
 	public static final String BANNER_LOCATION_PROPERTY_VALUE = SpringApplicationBannerPrinter.DEFAULT_BANNER_LOCATION;
 
-	/**
-	 * Banner location property key.
-	 */
+
 	public static final String BANNER_LOCATION_PROPERTY = SpringApplicationBannerPrinter.BANNER_LOCATION_PROPERTY;
 
 	private static final String SYSTEM_PROPERTY_JAVA_AWT_HEADLESS = "java.awt.headless";
@@ -319,10 +247,7 @@ public class SpringApplication {
 	}
 
 	/**
-	 * Run the Spring application, creating and refreshing a new
-	 * {@link ApplicationContext}.
-	 * @param args the application arguments (usually passed from a Java main method)
-	 * @return a running {@link ApplicationContext}
+	 * 运行Spring应用程序，创建并刷新一个新的
 	 */
 	public ConfigurableApplicationContext run(String... args) {
 		StopWatch stopWatch = new StopWatch();
@@ -1034,72 +959,40 @@ public class SpringApplication {
 		this.bannerMode = bannerMode;
 	}
 
-	/**
-	 * Sets if the application information should be logged when the application starts.
-	 * Defaults to {@code true}.
-	 * @param logStartupInfo if startup info should be logged.
-	 */
+
 	public void setLogStartupInfo(boolean logStartupInfo) {
 		this.logStartupInfo = logStartupInfo;
 	}
 
-	/**
-	 * Sets if a {@link CommandLinePropertySource} should be added to the application
-	 * context in order to expose arguments. Defaults to {@code true}.
-	 * @param addCommandLineProperties if command line arguments should be exposed
-	 */
+
 	public void setAddCommandLineProperties(boolean addCommandLineProperties) {
 		this.addCommandLineProperties = addCommandLineProperties;
 	}
 
-	/**
-	 * Sets if the {@link ApplicationConversionService} should be added to the application
-	 * context's {@link Environment}.
-	 * @param addConversionService if the application conversion service should be added
-	 * @since 2.1.0
-	 */
+
 	public void setAddConversionService(boolean addConversionService) {
 		this.addConversionService = addConversionService;
 	}
 
-	/**
-	 * Adds a {@link Bootstrapper} that can be used to initialize the
-	 * {@link BootstrapRegistry}.
-	 * @param bootstrapper the bootstraper
-	 * @since 2.4.0
-	 * @deprecated since 2.4.5 for removal in 2.6 in favor of
-	 * {@link #addBootstrapRegistryInitializer(BootstrapRegistryInitializer)}
-	 */
+
 	@Deprecated
 	public void addBootstrapper(Bootstrapper bootstrapper) {
 		Assert.notNull(bootstrapper, "Bootstrapper must not be null");
 		this.bootstrapRegistryInitializers.add(bootstrapper::initialize);
 	}
 
-	/**
-	 * Adds {@link BootstrapRegistryInitializer} instances that can be used to initialize
-	 * the {@link BootstrapRegistry}.
-	 * @param bootstrapRegistryInitializer the bootstrap registry initializer to add
-	 * @since 2.4.5
-	 */
+
 	public void addBootstrapRegistryInitializer(BootstrapRegistryInitializer bootstrapRegistryInitializer) {
 		Assert.notNull(bootstrapRegistryInitializer, "BootstrapRegistryInitializer must not be null");
 		this.bootstrapRegistryInitializers.addAll(Arrays.asList(bootstrapRegistryInitializer));
 	}
 
-	/**
-	 * Set default environment properties which will be used in addition to those in the
-	 * existing {@link Environment}.
-	 * @param defaultProperties the additional properties to set
-	 */
+
 	public void setDefaultProperties(Map<String, Object> defaultProperties) {
 		this.defaultProperties = defaultProperties;
 	}
 
-	/**
-	 * Convenient alternative to {@link #setDefaultProperties(Map)}.
-	 * @param defaultProperties some {@link Properties}
-	 */
+
 	public void setDefaultProperties(Properties defaultProperties) {
 		this.defaultProperties = new HashMap<>();
 		for (Object key : Collections.list(defaultProperties.propertyNames())) {
@@ -1107,93 +1000,45 @@ public class SpringApplication {
 		}
 	}
 
-	/**
-	 * Set additional profile values to use (on top of those set in system or command line
-	 * properties).
-	 * @param profiles the additional profiles to set
-	 */
+
 	public void setAdditionalProfiles(String... profiles) {
 		this.additionalProfiles = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(profiles)));
 	}
 
-	/**
-	 * Return an immutable set of any additional profiles in use.
-	 * @return the additional profiles
-	 */
+
 	public Set<String> getAdditionalProfiles() {
 		return this.additionalProfiles;
 	}
 
-	/**
-	 * Sets the bean name generator that should be used when generating bean names.
-	 * @param beanNameGenerator the bean name generator
-	 */
+
 	public void setBeanNameGenerator(BeanNameGenerator beanNameGenerator) {
 		this.beanNameGenerator = beanNameGenerator;
 	}
 
-	/**
-	 * Sets the underlying environment that should be used with the created application
-	 * context.
-	 * @param environment the environment
-	 */
+
 	public void setEnvironment(ConfigurableEnvironment environment) {
 		this.isCustomEnvironment = true;
 		this.environment = environment;
 	}
 
-	/**
-	 * Add additional items to the primary sources that will be added to an
-	 * ApplicationContext when {@link #run(String...)} is called.
-	 * <p>
-	 * The sources here are added to those that were set in the constructor. Most users
-	 * should consider using {@link #getSources()}/{@link #setSources(Set)} rather than
-	 * calling this method.
-	 * @param additionalPrimarySources the additional primary sources to add
-	 * @see #SpringApplication(Class...)
-	 * @see #getSources()
-	 * @see #setSources(Set)
-	 * @see #getAllSources()
-	 */
+
 	public void addPrimarySources(Collection<Class<?>> additionalPrimarySources) {
 		this.primarySources.addAll(additionalPrimarySources);
 	}
 
-	/**
-	 * Returns a mutable set of the sources that will be added to an ApplicationContext
-	 * when {@link #run(String...)} is called.
-	 * <p>
-	 * Sources set here will be used in addition to any primary sources set in the
-	 * constructor.
-	 * @return the application sources.
-	 * @see #SpringApplication(Class...)
-	 * @see #getAllSources()
-	 */
 	public Set<String> getSources() {
 		return this.sources;
 	}
 
-	/**
-	 * Set additional sources that will be used to create an ApplicationContext. A source
-	 * can be: a class name, package name, or an XML resource location.
-	 * <p>
-	 * Sources set here will be used in addition to any primary sources set in the
-	 * constructor.
-	 * @param sources the application sources to set
-	 * @see #SpringApplication(Class...)
-	 * @see #getAllSources()
-	 */
+
 	public void setSources(Set<String> sources) {
 		Assert.notNull(sources, "Sources must not be null");
 		this.sources = new LinkedHashSet<>(sources);
 	}
 
 	/**
-	 * Return an immutable set of all the sources that will be added to an
-	 * ApplicationContext when {@link #run(String...)} is called. This method combines any
-	 * primary sources specified in the constructor with any additional ones that have
-	 * been {@link #setSources(Set) explicitly set}.
-	 * @return an immutable set of all sources
+	 * 返回所有源的不可变集合，当{@link run(String…)}被调用时，这些源将被添加到ApplicationContext中。
+	 * 该方法将构造函数中指定的任何主源与已被{@link setSources(Set)显式设置}的任何附加源组合在一起。
 	 */
 	public Set<Object> getAllSources() {
 		Set<Object> allSources = new LinkedHashSet<>();
@@ -1206,95 +1051,53 @@ public class SpringApplication {
 		return Collections.unmodifiableSet(allSources);
 	}
 
-	/**
-	 * Sets the {@link ResourceLoader} that should be used when loading resources.
-	 * @param resourceLoader the resource loader
-	 */
+
 	public void setResourceLoader(ResourceLoader resourceLoader) {
 		Assert.notNull(resourceLoader, "ResourceLoader must not be null");
 		this.resourceLoader = resourceLoader;
 	}
 
-	/**
-	 * Return a prefix that should be applied when obtaining configuration properties from
-	 * the system environment.
-	 * @return the environment property prefix
-	 * @since 2.5.0
-	 */
+
 	public String getEnvironmentPrefix() {
 		return this.environmentPrefix;
 	}
 
-	/**
-	 * Set the prefix that should be applied when obtaining configuration properties from
-	 * the system environment.
-	 * @param environmentPrefix the environment property prefix to set
-	 * @since 2.5.0
-	 */
+
 	public void setEnvironmentPrefix(String environmentPrefix) {
 		this.environmentPrefix = environmentPrefix;
 	}
 
-	/**
-	 * Sets the type of Spring {@link ApplicationContext} that will be created. If not
-	 * specified defaults to {@link #DEFAULT_SERVLET_WEB_CONTEXT_CLASS} for web based
-	 * applications or {@link AnnotationConfigApplicationContext} for non web based
-	 * applications.
-	 * @param applicationContextClass the context class to set
-	 * @deprecated since 2.4.0 for removal in 2.6.0 in favor of
-	 * {@link #setApplicationContextFactory(ApplicationContextFactory)}
-	 */
+
 	@Deprecated
 	public void setApplicationContextClass(Class<? extends ConfigurableApplicationContext> applicationContextClass) {
 		this.webApplicationType = WebApplicationType.deduceFromApplicationContext(applicationContextClass);
 		this.applicationContextFactory = ApplicationContextFactory.ofContextClass(applicationContextClass);
 	}
 
-	/**
-	 * Sets the factory that will be called to create the application context. If not set,
-	 * defaults to a factory that will create
-	 * {@link AnnotationConfigServletWebServerApplicationContext} for servlet web
-	 * applications, {@link AnnotationConfigReactiveWebServerApplicationContext} for
-	 * reactive web applications, and {@link AnnotationConfigApplicationContext} for
-	 * non-web applications.
-	 * @param applicationContextFactory the factory for the context
-	 * @since 2.4.0
-	 */
+
 	public void setApplicationContextFactory(ApplicationContextFactory applicationContextFactory) {
 		this.applicationContextFactory = (applicationContextFactory != null) ? applicationContextFactory
 				: ApplicationContextFactory.DEFAULT;
 	}
 
-	/**
-	 * Sets the {@link ApplicationContextInitializer} that will be applied to the Spring
-	 * {@link ApplicationContext}.
-	 * @param initializers the initializers to set
-	 */
+
 	public void setInitializers(Collection<? extends ApplicationContextInitializer<?>> initializers) {
 		this.initializers = new ArrayList<>(initializers);
 	}
 
-	/**
-	 * Add {@link ApplicationContextInitializer}s to be applied to the Spring
-	 * {@link ApplicationContext}.
-	 * @param initializers the initializers to add
-	 */
+
 	public void addInitializers(ApplicationContextInitializer<?>... initializers) {
 		this.initializers.addAll(Arrays.asList(initializers));
 	}
 
-	/**
-	 * Returns read-only ordered Set of the {@link ApplicationContextInitializer}s that
-	 * will be applied to the Spring {@link ApplicationContext}.
-	 * @return the initializers
-	 */
+
 	public Set<ApplicationContextInitializer<?>> getInitializers() {
 		return asUnmodifiableOrderedSet(this.initializers);
 	}
 
 	/**
-	 * Sets the {@link ApplicationListener}s that will be applied to the SpringApplication
-	 * and registered with the {@link ApplicationContext}.
+	 * 设置将应用到SpringApplication并注册到{@link ApplicationContext}的{@link ApplicationListener}。
+	 * @param listeners要设置的侦听器
 	 * @param listeners the listeners to set
 	 */
 	public void setListeners(Collection<? extends ApplicationListener<?>> listeners) {
@@ -1302,17 +1105,14 @@ public class SpringApplication {
 	}
 
 	/**
-	 * Add {@link ApplicationListener}s to be applied to the SpringApplication and
-	 * registered with the {@link ApplicationContext}.
-	 * @param listeners the listeners to add
+	 * 添加{@link ApplicationListener}要应用到SpringApplication并注册到{@link ApplicationContext}。@param listeners要添加的侦听器
 	 */
 	public void addListeners(ApplicationListener<?>... listeners) {
 		this.listeners.addAll(Arrays.asList(listeners));
 	}
 
 	/**
-	 * Returns read-only ordered Set of the {@link ApplicationListener}s that will be
-	 * applied to the SpringApplication and registered with the {@link ApplicationContext}
+	 * 返回将应用到SpringApplication并注册到{@link ApplicationListener}的只读有序集。
 	 * .
 	 * @return the listeners
 	 */
@@ -1321,8 +1121,7 @@ public class SpringApplication {
 	}
 
 	/**
-	 * Set the {@link ApplicationStartup} to use for collecting startup metrics.
-	 * @param applicationStartup the application startup to use
+	 * 设置{@link ApplicationStartup}用于收集启动指标。@param applicationStartup应用程序启动使用
 	 * @since 2.4.0
 	 */
 	public void setApplicationStartup(ApplicationStartup applicationStartup) {
@@ -1330,8 +1129,7 @@ public class SpringApplication {
 	}
 
 	/**
-	 * Returns the {@link ApplicationStartup} used for collecting startup metrics.
-	 * @return the application startup
+	 * 返回用于收集启动指标的{@link ApplicationStartup}。@返回应用程序启动
 	 * @since 2.4.0
 	 */
 	public ApplicationStartup getApplicationStartup() {
@@ -1339,8 +1137,7 @@ public class SpringApplication {
 	}
 
 	/**
-	 * Return a {@link SpringApplicationShutdownHandlers} instance that can be used to add
-	 * or remove handlers that perform actions before the JVM is shutdown.
+	 * 返回一个{@link SpringApplicationShutdownHandlers}实例，该实例可用于添加或删除在JVM关闭之前执行操作的处理程序。
 	 * @return a {@link SpringApplicationShutdownHandlers} instance
 	 * @since 2.5.1
 	 */
@@ -1349,53 +1146,30 @@ public class SpringApplication {
 	}
 
 	/**
-	 * Static helper that can be used to run a {@link SpringApplication} from the
-	 * specified source using default settings.
-	 * @param primarySource the primary source to load
-	 * @param args the application arguments (usually passed from a Java main method)
-	 * @return the running {@link ApplicationContext}
+	 * 静态帮助器，可用于使用默认设置从指定源运行{@link SpringApplication}。
 	 */
 	public static ConfigurableApplicationContext run(Class<?> primarySource, String... args) {
 		return run(new Class<?>[] { primarySource }, args);
 	}
 
 	/**
-	 * Static helper that can be used to run a {@link SpringApplication} from the
-	 * specified sources using default settings and user supplied arguments.
-	 * @param primarySources the primary sources to load
-	 * @param args the application arguments (usually passed from a Java main method)
-	 * @return the running {@link ApplicationContext}
+	 * 静态帮助器，可以使用默认设置和用户提供的参数从指定的源运行{@link SpringApplication}。
 	 */
 	public static ConfigurableApplicationContext run(Class<?>[] primarySources, String[] args) {
 		return new SpringApplication(primarySources).run(args);
 	}
 
 	/**
-	 * A basic main that can be used to launch an application. This method is useful when
-	 * application sources are defined via a {@literal --spring.main.sources} command line
-	 * argument.
-	 * <p>
-	 * Most developers will want to define their own main method and call the
-	 * {@link #run(Class, String...) run} method instead.
-	 * @param args command line arguments
-	 * @throws Exception if the application cannot be started
-	 * @see SpringApplication#run(Class[], String[])
-	 * @see SpringApplication#run(Class, String...)
+	 * 可用于启动应用程序的基本主程序。当通过{@literal——spring.main定义应用程序源时，此方法非常有用。Sources}命令行参数。大多数开发人员都希望定义自己的main方法并调用
 	 */
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(new Class<?>[0], args);
 	}
 
 	/**
-	 * Static helper that can be used to exit a {@link SpringApplication} and obtain a
-	 * code indicating success (0) or otherwise. Does not throw exceptions but should
-	 * print stack traces of any encountered. Applies the specified
-	 * {@link ExitCodeGenerator} in addition to any Spring beans that implement
-	 * {@link ExitCodeGenerator}. In the case of multiple exit codes the highest value
-	 * will be used (or if all values are negative, the lowest value will be used)
-	 * @param context the context to close if possible
-	 * @param exitCodeGenerators exit code generators
-	 * @return the outcome (0 if successful)
+	 * 静态助手，可以用来退出{@link SpringApplication}并获得指示成功(0)或其他的代码。不抛出异常，但应打印遇到的任何堆栈跟踪。
+	 * 应用指定的{@link ExitCodeGenerator}以及实现{@link ExitCodeGenerator}的任何Spring bean。在多个退出代码的情况下，
+	 * 将使用最高的值(或如果所有值都是负数，将使用最低的值)@param context上下文关闭@param exitCodeGenerators退出代码生成器@返回结果(如果成功，则为0)
 	 */
 	public static int exit(ApplicationContext context, ExitCodeGenerator... exitCodeGenerators) {
 		Assert.notNull(context, "Context must not be null");
@@ -1436,8 +1210,7 @@ public class SpringApplication {
 	}
 
 	/**
-	 * {@link BeanFactoryPostProcessor} to re-order our property sources below any
-	 * {@code @PropertySource} items added by the {@link ConfigurationClassPostProcessor}.
+	 * @link BeanFactoryPostProcessor}在{@link ConfigurationClassPostProcessor}添加的任何{@code @PropertySource}项下面重新排列我们的属性源
 	 */
 	private static class PropertySourceOrderingBeanFactoryPostProcessor implements BeanFactoryPostProcessor, Ordered {
 

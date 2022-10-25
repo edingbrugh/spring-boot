@@ -59,16 +59,9 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * {@link DeferredImportSelector} to handle {@link EnableAutoConfiguration
- * auto-configuration}. This class can also be subclassed if a custom variant of
- * {@link EnableAutoConfiguration @EnableAutoConfiguration} is needed.
- *
- * @author Phillip Webb
- * @author Andy Wilkinson
- * @author Stephane Nicoll
- * @author Madhura Bhave
- * @since 1.3.0
- * @see EnableAutoConfiguration
+ * {@link DeferredImportSelector}处理{@link EnableAutoConfiguration auto-configuration}。
+ * 如果需要{@link EnableAutoConfiguration @EnableAutoConfiguration}的自定义变体，这个类也可以被子类化。
+
  */
 public class AutoConfigurationImportSelector implements DeferredImportSelector, BeanClassLoaderAware,
 		ResourceLoaderAware, BeanFactoryAware, EnvironmentAware, Ordered {
@@ -110,10 +103,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 	}
 
 	/**
-	 * Return the {@link AutoConfigurationEntry} based on the {@link AnnotationMetadata}
-	 * of the importing {@link Configuration @Configuration} class.
-	 * @param annotationMetadata the annotation metadata of the configuration class
-	 * @return the auto-configurations that should be imported
+	 * 根据导入的{@link Configuration @Configuration}类的{@link AnnotationMetadata}返回{@link AutoConfigurationEntry}。
 	 */
 	protected AutoConfigurationEntry getAutoConfigurationEntry(AnnotationMetadata annotationMetadata) {
 		if (!isEnabled(annotationMetadata)) {
@@ -143,11 +133,8 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 	}
 
 	/**
-	 * Return the appropriate {@link AnnotationAttributes} from the
-	 * {@link AnnotationMetadata}. By default this method will return attributes for
-	 * {@link #getAnnotationClass()}.
-	 * @param metadata the annotation metadata
-	 * @return annotation attributes
+	 * 从{@link AnnotationMetadata}返回适当的{@link AnnotationAttributes}。
+	 * 默认情况下，该方法将返回、getAnnotationClass的属性。@param metadata注释元数据
 	 */
 	protected AnnotationAttributes getAttributes(AnnotationMetadata metadata) {
 		String name = getAnnotationClass().getName();
@@ -158,21 +145,14 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 	}
 
 	/**
-	 * Return the source annotation class used by the selector.
-	 * @return the annotation class
+	 * 返回选择器使用的源注释类。
 	 */
 	protected Class<?> getAnnotationClass() {
 		return EnableAutoConfiguration.class;
 	}
 
 	/**
-	 * Return the auto-configuration class names that should be considered. By default
-	 * this method will load candidates using {@link SpringFactoriesLoader} with
-	 * {@link #getSpringFactoriesLoaderFactoryClass()}.
-	 * @param metadata the source metadata
-	 * @param attributes the {@link #getAttributes(AnnotationMetadata) annotation
-	 * attributes}
-	 * @return a list of candidate configurations
+	 * 返回应该考虑的自动配置类名。默认情况下，该方法将使用springfactoresloader和 getspringfactoryclass 加载候选对象。
 	 */
 	protected List<String> getCandidateConfigurations(AnnotationMetadata metadata, AnnotationAttributes attributes) {
 		List<String> configurations = SpringFactoriesLoader.loadFactoryNames(getSpringFactoriesLoaderFactoryClass(),
@@ -183,9 +163,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 	}
 
 	/**
-	 * Return the class used by {@link SpringFactoriesLoader} to load configuration
-	 * candidates.
-	 * @return the factory class
+	 * 返回 springfactoresloader用来加载候选配置的类。
 	 */
 	protected Class<?> getSpringFactoriesLoaderFactoryClass() {
 		return EnableAutoConfiguration.class;
@@ -430,6 +408,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 					() -> String.format("Only %s implementations are supported, got %s",
 							AutoConfigurationImportSelector.class.getSimpleName(),
 							deferredImportSelector.getClass().getName()));
+			// todo ConfigurationClassParser#getImports
 			AutoConfigurationEntry autoConfigurationEntry = ((AutoConfigurationImportSelector) deferredImportSelector)
 					.getAutoConfigurationEntry(annotationMetadata);
 			this.autoConfigurationEntries.add(autoConfigurationEntry);
