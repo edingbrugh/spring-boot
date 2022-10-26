@@ -24,21 +24,14 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.core.io.support.SpringFactoriesLoader;
 
 /**
- * Strategy interface for creating the {@link ConfigurableApplicationContext} used by a
- * {@link SpringApplication}. Created contexts should be returned in their default form,
- * with the {@code SpringApplication} responsible for configuring and refreshing the
- * context.
- *
- * @author Andy Wilkinson
- * @author Phillip Webb
- * @since 2.4.0
+ * 用于创建{@link SpringApplication}使用的{@link ConfigurableApplicationContext}的策略接口。
+ * 创建的上下文应该以默认形式返回，{@code SpringApplication}负责配置和刷新上下文。
  */
 @FunctionalInterface
 public interface ApplicationContextFactory {
 
 	/**
-	 * A default {@link ApplicationContextFactory} implementation that will create an
-	 * appropriate context for the {@link WebApplicationType}.
+	 * 一个默认的{@link ApplicationContextFactory}实现，它将为{@link WebApplicationType}创建一个适当的上下文。
 	 */
 	ApplicationContextFactory DEFAULT = (webApplicationType) -> {
 		try {
@@ -58,30 +51,19 @@ public interface ApplicationContextFactory {
 	};
 
 	/**
-	 * Creates the {@link ConfigurableApplicationContext application context} for a
-	 * {@link SpringApplication}, respecting the given {@code webApplicationType}.
-	 * @param webApplicationType the web application type
-	 * @return the newly created application context
+	 * 为{@link SpringApplication}创建{@link ConfigurableApplicationContext 应用程序上下文}，根据给定的{@code webApplicationType}。
 	 */
 	ConfigurableApplicationContext create(WebApplicationType webApplicationType);
 
 	/**
-	 * Creates an {@code ApplicationContextFactory} that will create contexts by
-	 * instantiating the given {@code contextClass} via its primary constructor.
-	 * @param contextClass the context class
-	 * @return the factory that will instantiate the context class
-	 * @see BeanUtils#instantiateClass(Class)
+	 * 创建一个{@code ApplicationContextFactory}，它将通过其主构造函数实例化给定的{@code contextClass}来创建上下文。
 	 */
 	static ApplicationContextFactory ofContextClass(Class<? extends ConfigurableApplicationContext> contextClass) {
 		return of(() -> BeanUtils.instantiateClass(contextClass));
 	}
 
 	/**
-	 * Creates an {@code ApplicationContextFactory} that will create contexts by calling
-	 * the given {@link Supplier}.
-	 * @param supplier the context supplier, for example
-	 * {@code AnnotationConfigApplicationContext::new}
-	 * @return the factory that will instantiate the context class
+	 * 创建一个{@code ApplicationContextFactory}，它将通过调用给定的{@link Supplier}来创建上下文。
 	 */
 	static ApplicationContextFactory of(Supplier<ConfigurableApplicationContext> supplier) {
 		return (webApplicationType) -> supplier.get();
